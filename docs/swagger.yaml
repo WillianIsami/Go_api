@@ -1,0 +1,232 @@
+definitions:
+  controllers.CreateProductRequest:
+    type: object
+  controllers.CreateProductResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.ProductResponse'
+      message:
+        type: string
+    type: object
+  controllers.DeleteProductResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.ProductResponse'
+      message:
+        type: string
+    type: object
+  controllers.ErrorResponse:
+    properties:
+      errorCode:
+        type: string
+      message:
+        type: string
+    type: object
+  controllers.ListProductsResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.ProductResponse'
+        type: array
+      message:
+        type: string
+    type: object
+  controllers.ShowProductResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.ProductResponse'
+      message:
+        type: string
+    type: object
+  controllers.UpdateProductRequest:
+    properties:
+      category:
+        $ref: '#/definitions/models.Category'
+      category_id:
+        type: integer
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: string
+      stock:
+        type: integer
+    type: object
+  controllers.UpdateProductResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.ProductResponse'
+      message:
+        type: string
+    type: object
+  models.Category:
+    type: object
+  models.ProductResponse:
+    properties:
+      category_id:
+        type: integer
+      createdAt:
+        type: string
+      description:
+        type: string
+      deteledAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: string
+      stock:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /product:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a new job product
+      parameters:
+      - description: Product identification
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.DeleteProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Delete product
+      tags:
+      - Product
+    get:
+      consumes:
+      - application/json
+      description: Show a job product
+      parameters:
+      - description: Product identification
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.ShowProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Show product
+      tags:
+      - Products
+    post:
+      consumes:
+      - application/json
+      description: Create a new job product
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.CreateProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Create product
+      tags:
+      - Products
+    put:
+      consumes:
+      - application/json
+      description: Update a job product
+      parameters:
+      - description: Product Identification
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Product data to Update
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UpdateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.UpdateProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Update product
+      tags:
+      - Products
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: List all job products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.ListProductsResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: List products
+      tags:
+      - Products
+swagger: "2.0"
