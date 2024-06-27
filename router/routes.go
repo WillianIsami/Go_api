@@ -15,10 +15,16 @@ func initializeRouter(router *gin.Engine) {
 	v1 := router.Group(basePath)
 	{
 		v1.GET("/product", controllers.GetProduct)
-		v1.POST("/product/:id", controllers.CreateProduct)
+		v1.POST("/product", controllers.CreateProduct)
 		v1.DELETE("/product", controllers.DeleteProduct)
 		v1.PUT("/product", controllers.UpdateProduct)
 		v1.GET("/products", controllers.GetAllProducts)
+
+		v1.GET("/category", controllers.GetCategory)
+		v1.POST("/category", controllers.CreateCategory)
+		v1.DELETE("/category", controllers.DeleteCategory)
+		v1.PUT("/category", controllers.UpdateCategory)
+		v1.GET("/categories", controllers.GetAllCategory)
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))

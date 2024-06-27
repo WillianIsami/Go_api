@@ -6,6 +6,7 @@ import (
 
 	"github.com/WillianIsami/go_api/models"
 	"github.com/gin-gonic/gin"
+	"github.com/shopspring/decimal"
 )
 
 // @BasePath /api/v1
@@ -20,7 +21,7 @@ import (
 // @Router /products [get]
 func GetAllProducts(c *gin.Context) {
 	products := []models.Product{}
-	if err := db.Find(&products).Error; err != nil {
+	if err := db.Preload("Category").Find(&products).Error; err != nil {
 		sendError(c, http.StatusInternalServerError, "error listing products")
 		return
 	}
@@ -31,7 +32,7 @@ func GetAllProducts(c *gin.Context) {
 
 // @Summary Show product
 // @Description Show a job product
-// @Tags Products
+// @Tags Product
 // @Accept json
 // @Produce json
 // @Param id query string true "Product identification"
@@ -46,7 +47,7 @@ func GetProduct(c *gin.Context) {
 		return
 	}
 	product := models.Product{}
-	if err := db.First(&product, id).Error; err != nil {
+	if err := db.Preload("Category").First(&product, id).Error; err != nil {
 		sendError(c, http.StatusNotFound, "product not found")
 		return
 	}
@@ -58,7 +59,7 @@ func GetProduct(c *gin.Context) {
 
 // @Summary Create product
 // @Description Create a new job product
-// @Tags Products
+// @Tags Product
 // @Accept json
 // @Produce json
 // @Param request body CreateProductRequest true "Request body"
@@ -68,27 +69,40 @@ func GetProduct(c *gin.Context) {
 // @Router /product [post]
 func CreateProduct(c *gin.Context) {
 	request := CreateProductRequest{}
+	c.BindJSON(&request)
+
+	if err := request.Validate(); err != nil {
+		logger.Errorf("validation error: %v", err.Error())
+		sendError(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	price := decimal.NewFromFloat(request.Price)
 	product := models.Product{
 		Name:        request.Name,
 		Description: request.Description,
-		Price:       request.Price,
+		Price:       price,
 		Stock:       request.Stock,
 		CategoryID:  *request.CategoryID,
-		Category:    request.Category,
 	}
-	if err := c.ShouldBindJSON(&product); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := db.Create(&product).Error; err != nil {
+		logger.Errorf("error creating product: %v", err.Error())
+		sendError(c, http.StatusInternalServerError, "error creating product on database")
 		return
 	}
-	db.Create(&product)
-	c.JSON(http.StatusCreated, product)
+	if err := db.Preload("Category").First(&product, product.ID).Error; err != nil {
+		logger.Errorf("error loading category: %v", err.Error())
+		sendError(c, http.StatusInternalServerError, "error loading category")
+		return
+	}
+
+	sendSuccess(c, "create_product", product)
 }
 
 // @BasePath /api/v1
 
 // @Summary Update product
 // @Description Update a job product
-// @Tags Products
+// @Tags Product
 // @Accept json
 // @Produce json
 // @Param id query string true "Product Identification"
@@ -100,7 +114,17 @@ func CreateProduct(c *gin.Context) {
 // @Router /product [put]
 func UpdateProduct(c *gin.Context) {
 	var product models.Product
-	if err := db.Where("id = ?", c.Param("id")).First(&product).Error; err != nil {
+	id := c.Query("id")
+	if id == "" {
+		sendError(c, http.StatusBadRequest, errParamIsRequired("id", "queryParameter").Error())
+		return
+	}
+	if err := db.Preload("Category").First(&product, id).Error; err != nil {
+		logger.Errorf("error loading category: %v", err.Error())
+		sendError(c, http.StatusInternalServerError, "error loading category")
+		return
+	}
+	if err := db.Where("id = ?", id).First(&product).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Product not found"})
 		return
 	}
@@ -131,7 +155,7 @@ func DeleteProduct(c *gin.Context) {
 		return
 	}
 	product := models.Product{}
-	if err := db.First(&product, id).Error; err != nil {
+	if err := db.Preload("Category").First(&product, id).Error; err != nil {
 		sendError(c, http.StatusNotFound, fmt.Sprintf("product with id: %s not found", id))
 		return
 	}

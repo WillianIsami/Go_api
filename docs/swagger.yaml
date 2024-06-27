@@ -1,5 +1,18 @@
 definitions:
   controllers.CreateProductRequest:
+    properties:
+      category:
+        $ref: '#/definitions/models.Category'
+      category_id:
+        type: integer
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: string
+      stock:
+        type: integer
     type: object
   controllers.CreateProductResponse:
     properties:
@@ -61,9 +74,49 @@ definitions:
         type: string
     type: object
   models.Category:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/models.Product'
+        type: array
+      updatedAt:
+        type: string
+    type: object
+  models.Product:
+    properties:
+      category:
+        $ref: '#/definitions/models.Category'
+      categoryID:
+        type: integer
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: string
+      stock:
+        type: integer
+      updatedAt:
+        type: string
     type: object
   models.ProductResponse:
     properties:
+      category:
+        $ref: '#/definitions/models.Category'
       category_id:
         type: integer
       createdAt:

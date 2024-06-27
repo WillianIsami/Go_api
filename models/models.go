@@ -3,23 +3,29 @@ package models
 import (
 	"time"
 
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
 type Product struct {
-	gorm.Model
-	Name        string
-	Description string
-	Price       string
-	Stock       int
-	CategoryID  uint
-	Category    Category
+	ID          uint `gorm:"primaryKey;unique"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	DeletedAt   *time.Time
+	Name        string          `gorm:"size:255" json:"name"`
+	Description string          `gorm:"size:255" json:"description"`
+	Price       decimal.Decimal `gorm:"type:decimal(10,2)" json:"price"`
+	Stock       int             `json:"stock"`
+	CategoryID  uint            `json:"category_id"`
+	Category    Category        `gorm:"foreignKey:CategoryID"`
 }
 
 type Category struct {
-	gorm.Model
-	Name     string
-	Products []Product
+	ID        uint `gorm:"primaryKey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
+	Name      string `gorm:"size:255;uniqueIndex" json:"name"`
 }
 
 type User struct {
@@ -41,26 +47,23 @@ type Order struct {
 
 type OrderItem struct {
 	gorm.Model
-	OrderID   uint    `json:"order_id"`
-	Order     Order   `json:"order" gorm:"foreignKey:OrderID"`
-	ProductId uint    `json:"product_id"`
-	Product   Product `json:"product"`
-	Quantity  int     `json:"quantity"`
-	Price     float64 `json:"price"`
-}
-
-func (c Category) IsEmpty() bool {
-	return c.Name == "" && len(c.Products) == 0
+	OrderID   uint            `json:"order_id"`
+	Order     Order           `json:"order" gorm:"foreignKey:OrderID"`
+	ProductId uint            `json:"product_id"`
+	Product   Product         `json:"product"`
+	Quantity  int             `json:"quantity"`
+	Price     decimal.Decimal `json:"price" gorm:"type:decimal(10,2)"`
 }
 
 type ProductResponse struct {
-	ID          uint      `json:"id"`
-	CreatedAt   time.Time `json:"createdAt"`
-	UpdatedAt   time.Time `json:"updatedAt"`
-	DeletedAt   time.Time `json:"deteledAt,omitempty"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-	Price       string    `json:"price"`
-	Stock       int       `json:"stock"`
-	CategoryID  uint      `json:"category_id"`
+	ID          uint            `json:"id"`
+	CreatedAt   time.Time       `json:"createdAt"`
+	UpdatedAt   time.Time       `json:"updatedAt"`
+	DeletedAt   time.Time       `json:"deteledAt,omitempty"`
+	Name        string          `json:"name"`
+	Description string          `json:"description"`
+	Price       decimal.Decimal `json:"price" gorm:"type:decimal(10,2)"`
+	Stock       int             `json:"stock"`
+	CategoryID  uint            `json:"category_id"`
+	Category    Category        `json:"category"`
 }
