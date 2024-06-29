@@ -125,11 +125,11 @@ func UpdateProduct(c *gin.Context) {
 		return
 	}
 	if err := db.Where("id = ?", id).First(&product).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Product not found"})
+		sendError(c, http.StatusNotFound, "error product not found")
 		return
 	}
 	if err := c.ShouldBindJSON(&product); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		sendError(c, http.StatusBadRequest, "error binding json")
 		return
 	}
 	db.Save(&product)

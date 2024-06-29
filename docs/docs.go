@@ -15,6 +15,246 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/categories": {
+            "get": {
+                "description": "Get a list of all categories",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Get all categories",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controllers.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Category"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/category": {
+            "get": {
+                "description": "Get a category by its ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "category"
+                ],
+                "summary": "Get category by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controllers.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Category"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "update details of an existing category",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "category"
+                ],
+                "summary": "Update a existing category",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controllers.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Category"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new category with the given details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "category"
+                ],
+                "summary": "Create a new category",
+                "parameters": [
+                    {
+                        "description": "Category details",
+                        "name": "category",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.CreateCategoryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controllers.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Category"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a category by its ID",
+                "tags": [
+                    "category"
+                ],
+                "summary": "Delete a category by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controllers.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Category"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/product": {
             "get": {
                 "description": "Show a job product",
@@ -25,7 +265,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Products"
+                    "Product"
                 ],
                 "summary": "Show product",
                 "parameters": [
@@ -67,7 +307,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Products"
+                    "Product"
                 ],
                 "summary": "Update product",
                 "parameters": [
@@ -124,7 +364,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Products"
+                    "Product"
                 ],
                 "summary": "Create product",
                 "parameters": [
@@ -233,12 +473,26 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "controllers.CreateCategoryRequest": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "controllers.CreateProductRequest": {
             "type": "object",
+            "required": [
+                "category_id",
+                "name",
+                "price",
+                "stock"
+            ],
             "properties": {
-                "category": {
-                    "$ref": "#/definitions/models.Category"
-                },
                 "category_id": {
                     "type": "integer"
                 },
@@ -249,7 +503,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "price": {
-                    "type": "string"
+                    "type": "number"
                 },
                 "stock": {
                     "type": "integer"
@@ -314,12 +568,24 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.UpdateProductRequest": {
+        "controllers.SuccessResponse": {
             "type": "object",
             "properties": {
-                "category": {
-                    "$ref": "#/definitions/models.Category"
-                },
+                "data": {},
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.UpdateProductRequest": {
+            "type": "object",
+            "required": [
+                "category_id",
+                "name",
+                "price",
+                "stock"
+            ],
+            "properties": {
                 "category_id": {
                     "type": "integer"
                 },
@@ -330,7 +596,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "price": {
-                    "type": "string"
+                    "type": "number"
                 },
                 "stock": {
                     "type": "integer"
@@ -363,47 +629,6 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "products": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Product"
-                    }
-                },
-                "updatedAt": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.Product": {
-            "type": "object",
-            "properties": {
-                "category": {
-                    "$ref": "#/definitions/models.Category"
-                },
-                "categoryID": {
-                    "type": "integer"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "string"
-                },
-                "stock": {
-                    "type": "integer"
-                },
                 "updatedAt": {
                     "type": "string"
                 }
@@ -434,7 +659,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "price": {
-                    "type": "string"
+                    "type": "number"
                 },
                 "stock": {
                     "type": "integer"

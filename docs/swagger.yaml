@@ -1,8 +1,13 @@
 definitions:
+  controllers.CreateCategoryRequest:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
   controllers.CreateProductRequest:
     properties:
-      category:
-        $ref: '#/definitions/models.Category'
       category_id:
         type: integer
       description:
@@ -10,9 +15,14 @@ definitions:
       name:
         type: string
       price:
-        type: string
+        type: number
       stock:
         type: integer
+    required:
+    - category_id
+    - name
+    - price
+    - stock
     type: object
   controllers.CreateProductResponse:
     properties:
@@ -51,10 +61,14 @@ definitions:
       message:
         type: string
     type: object
+  controllers.SuccessResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+    type: object
   controllers.UpdateProductRequest:
     properties:
-      category:
-        $ref: '#/definitions/models.Category'
       category_id:
         type: integer
       description:
@@ -62,9 +76,14 @@ definitions:
       name:
         type: string
       price:
-        type: string
+        type: number
       stock:
         type: integer
+    required:
+    - category_id
+    - name
+    - price
+    - stock
     type: object
   controllers.UpdateProductResponse:
     properties:
@@ -83,33 +102,6 @@ definitions:
         type: integer
       name:
         type: string
-      products:
-        items:
-          $ref: '#/definitions/models.Product'
-        type: array
-      updatedAt:
-        type: string
-    type: object
-  models.Product:
-    properties:
-      category:
-        $ref: '#/definitions/models.Category'
-      categoryID:
-        type: integer
-      createdAt:
-        type: string
-      deletedAt:
-        type: string
-      description:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      price:
-        type: string
-      stock:
-        type: integer
       updatedAt:
         type: string
     type: object
@@ -130,7 +122,7 @@ definitions:
       name:
         type: string
       price:
-        type: string
+        type: number
       stock:
         type: integer
       updatedAt:
@@ -139,6 +131,150 @@ definitions:
 info:
   contact: {}
 paths:
+  /categories:
+    get:
+      description: Get a list of all categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Category'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Get all categories
+      tags:
+      - categories
+  /category:
+    delete:
+      description: Delete a category by its ID
+      parameters:
+      - description: Category ID
+        in: query
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Category'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Delete a category by ID
+      tags:
+      - category
+    get:
+      description: Get a category by its ID
+      parameters:
+      - description: Category ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Category'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Get category by ID
+      tags:
+      - category
+    post:
+      consumes:
+      - application/json
+      description: Create a new category with the given details
+      parameters:
+      - description: Category details
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.CreateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Category'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Create a new category
+      tags:
+      - category
+    put:
+      description: update details of an existing category
+      parameters:
+      - description: Category ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Category'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Update a existing category
+      tags:
+      - category
   /product:
     delete:
       consumes:
@@ -195,7 +331,7 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: Show product
       tags:
-      - Products
+      - Product
     post:
       consumes:
       - application/json
@@ -224,7 +360,7 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: Create product
       tags:
-      - Products
+      - Product
     put:
       consumes:
       - application/json
@@ -262,7 +398,7 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: Update product
       tags:
-      - Products
+      - Product
   /products:
     get:
       consumes:

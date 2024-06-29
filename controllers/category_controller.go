@@ -8,10 +8,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @title GO_API
+// @version 1.0
+// @description Category management API.
+// @BasePath /api/v1
+
 type CreateCategoryRequest struct {
 	Name string `json:"name" binding:"required"`
 }
 
+// GetAllCategory godoc
+// @Summary Get all categories
+// @Description Get a list of all categories
+// @Tags categories
+// @Produce json
+// @Success 200 {object} SuccessResponse{data=models.Category}
+// @Failure 500 {object} ErrorResponse
+// @Router /categories [get]
 func GetAllCategory(c *gin.Context) {
 	var categories []models.Category
 	if err := db.Find(&categories).Error; err != nil {
@@ -21,6 +34,16 @@ func GetAllCategory(c *gin.Context) {
 	sendSuccess(c, "list-categories", categories)
 }
 
+// GetCategory godoc
+// @Summary Get category by ID
+// @Description Get a category by its ID
+// @Tags category
+// @Produce json
+// @Param id query string true "Category ID"
+// @Success 200 {object} SuccessResponse{data=models.Category}
+// @Failure 400 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Router /category [get]
 func GetCategory(c *gin.Context) {
 	id := c.Query("id")
 	if id == "" {
@@ -36,6 +59,16 @@ func GetCategory(c *gin.Context) {
 	sendSuccess(c, "show-category", category)
 }
 
+// CreateCategory godoc
+// @Summary Create a new category
+// @Description Create a new category with the given details
+// @Tags category
+// @Accept json
+// @Produce json
+// @Param category body CreateCategoryRequest true "Category details"
+// @Success 200 {object} SuccessResponse{data=models.Category}
+// @Failure 500 {object} ErrorResponse
+// @Router /category [post]
 func CreateCategory(c *gin.Context) {
 	request := CreateCategoryRequest{}
 	c.BindJSON(&request)
@@ -50,6 +83,16 @@ func CreateCategory(c *gin.Context) {
 	sendSuccess(c, "create_category", category)
 }
 
+// UpdateCategory godoc
+// @Summary Update a existing category
+// @Description update details of an existing category
+// @Tags category
+// @Produce json
+// @Param id query string true "Category ID"
+// @Success 200 {object} SuccessResponse{data=models.Category}
+// @Failure 400 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Router /category [put]
 func UpdateCategory(c *gin.Context) {
 	id := c.Query("id")
 	if id == "" {
@@ -58,17 +101,26 @@ func UpdateCategory(c *gin.Context) {
 	}
 	category := models.Category{}
 	if err := db.Where("id = ?", id).First(&category).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "category not found"})
+		sendError(c, http.StatusBadRequest, "error category not found")
 		return
 	}
 	if err := c.ShouldBindJSON(&category); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		sendError(c, http.StatusBadRequest, "error binding json")
 		return
 	}
 	db.Save(&category)
 	c.JSON(http.StatusOK, category)
 }
 
+// DeleteCategory godoc
+// @Summary Delete a category by ID
+// @Description Delete a category by its ID
+// @Tags category
+// @Param id query string true "Category ID"
+// @Success 200 {object} SuccessResponse{data=models.Category}
+// @Failure 400 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Router /category [delete]
 func DeleteCategory(c *gin.Context) {
 	id := c.Query("id")
 	if id == "" {

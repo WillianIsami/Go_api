@@ -7,17 +7,30 @@ import (
 	"gorm.io/gorm"
 )
 
-type Product struct {
-	ID          uint `gorm:"primaryKey;unique"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	DeletedAt   *time.Time
-	Name        string          `gorm:"size:255" json:"name"`
-	Description string          `gorm:"size:255" json:"description"`
-	Price       decimal.Decimal `gorm:"type:decimal(10,2)" json:"price"`
+type ProductResponse struct {
+	ID          uint            `json:"id"`
+	CreatedAt   time.Time       `json:"createdAt"`
+	UpdatedAt   time.Time       `json:"updatedAt"`
+	DeletedAt   time.Time       `json:"deteledAt,omitempty"`
+	Name        string          `json:"name"`
+	Description string          `json:"description"`
+	Price       decimal.Decimal `json:"price" gorm:"type:decimal(10,2)"`
 	Stock       int             `json:"stock"`
 	CategoryID  uint            `json:"category_id"`
-	Category    Category        `gorm:"foreignKey:CategoryID"`
+	Category    Category        `json:"category"`
+}
+
+type Product struct {
+	ID          uint            `json:"id" gorm:"primaryKey;unique"`
+	CreatedAt   time.Time       `json:"createdAt"`
+	UpdatedAt   time.Time       `json:"updatedAt"`
+	DeletedAt   *time.Time      `json:"deleteAt,omitempty"`
+	Name        string          `json:"name" gorm:"size:255"`
+	Description string          `json:"description" gorm:"size:255"`
+	Price       decimal.Decimal `json:"price" gorm:"type:decimal(10,2)"`
+	Stock       int             `json:"stock"`
+	CategoryID  uint            `json:"category_id"`
+	Category    Category        `json:"category" gorm:"foreignKey:CategoryID"`
 }
 
 type Category struct {
@@ -53,17 +66,4 @@ type OrderItem struct {
 	Product   Product         `json:"product"`
 	Quantity  int             `json:"quantity"`
 	Price     decimal.Decimal `json:"price" gorm:"type:decimal(10,2)"`
-}
-
-type ProductResponse struct {
-	ID          uint            `json:"id"`
-	CreatedAt   time.Time       `json:"createdAt"`
-	UpdatedAt   time.Time       `json:"updatedAt"`
-	DeletedAt   time.Time       `json:"deteledAt,omitempty"`
-	Name        string          `json:"name"`
-	Description string          `json:"description"`
-	Price       decimal.Decimal `json:"price" gorm:"type:decimal(10,2)"`
-	Stock       int             `json:"stock"`
-	CategoryID  uint            `json:"category_id"`
-	Category    Category        `json:"category"`
 }
