@@ -96,7 +96,7 @@ definitions:
     properties:
       createdAt:
         type: string
-      deletedAt:
+      deleteAt:
         type: string
       id:
         type: integer
@@ -152,7 +152,7 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: Get all categories
       tags:
-      - categories
+      - Categories
   /category:
     delete:
       description: Delete a category by its ID
@@ -182,7 +182,7 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: Delete a category by ID
       tags:
-      - category
+      - Category
     get:
       description: Get a category by its ID
       parameters:
@@ -213,7 +213,7 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: Get category by ID
       tags:
-      - category
+      - Category
     post:
       consumes:
       - application/json
@@ -243,7 +243,7 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: Create a new category
       tags:
-      - category
+      - Category
     put:
       description: update details of an existing category
       parameters:
@@ -274,7 +274,7 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: Update a existing category
       tags:
-      - category
+      - Category
   /product:
     delete:
       consumes:

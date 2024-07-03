@@ -25,6 +25,10 @@ func initializeRouter(router *gin.Engine) {
 		v1.DELETE("/category", controllers.DeleteCategory)
 		v1.PUT("/category", controllers.UpdateCategory)
 		v1.GET("/categories", controllers.GetAllCategory)
+
+		v1.GET("/order", controllers.GetOrder)
+		v1.POST("/order", controllers.CreateOrder)
+		v1.GET("/orders", controllers.GetAllOrders)
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))

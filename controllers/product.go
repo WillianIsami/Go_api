@@ -95,7 +95,7 @@ func CreateProduct(c *gin.Context) {
 		return
 	}
 
-	sendSuccess(c, "create_product", product)
+	sendSuccess(c, "create-product", product)
 }
 
 // @BasePath /api/v1

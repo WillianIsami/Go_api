@@ -20,7 +20,7 @@ type CreateCategoryRequest struct {
 // GetAllCategory godoc
 // @Summary Get all categories
 // @Description Get a list of all categories
-// @Tags categories
+// @Tags Categories
 // @Produce json
 // @Success 200 {object} SuccessResponse{data=models.Category}
 // @Failure 500 {object} ErrorResponse
@@ -37,7 +37,7 @@ func GetAllCategory(c *gin.Context) {
 // GetCategory godoc
 // @Summary Get category by ID
 // @Description Get a category by its ID
-// @Tags category
+// @Tags Category
 // @Produce json
 // @Param id query string true "Category ID"
 // @Success 200 {object} SuccessResponse{data=models.Category}
@@ -62,7 +62,7 @@ func GetCategory(c *gin.Context) {
 // CreateCategory godoc
 // @Summary Create a new category
 // @Description Create a new category with the given details
-// @Tags category
+// @Tags Category
 // @Accept json
 // @Produce json
 // @Param category body CreateCategoryRequest true "Category details"
@@ -80,13 +80,13 @@ func CreateCategory(c *gin.Context) {
 		sendError(c, http.StatusInternalServerError, "error creating category on database")
 		return
 	}
-	sendSuccess(c, "create_category", category)
+	sendSuccess(c, "create-category", category)
 }
 
 // UpdateCategory godoc
 // @Summary Update a existing category
 // @Description update details of an existing category
-// @Tags category
+// @Tags Category
 // @Produce json
 // @Param id query string true "Category ID"
 // @Success 200 {object} SuccessResponse{data=models.Category}
@@ -115,7 +115,7 @@ func UpdateCategory(c *gin.Context) {
 // DeleteCategory godoc
 // @Summary Delete a category by ID
 // @Description Delete a category by its ID
-// @Tags category
+// @Tags Category
 // @Param id query string true "Category ID"
 // @Success 200 {object} SuccessResponse{data=models.Category}
 // @Failure 400 {object} ErrorResponse

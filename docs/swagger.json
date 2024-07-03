@@ -11,7 +11,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "categories"
+                    "Categories"
                 ],
                 "summary": "Get all categories",
                 "responses": {
@@ -49,7 +49,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "category"
+                    "Category"
                 ],
                 "summary": "Get category by ID",
                 "parameters": [
@@ -100,7 +100,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "category"
+                    "Category"
                 ],
                 "summary": "Update a existing category",
                 "parameters": [
@@ -154,7 +154,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "category"
+                    "Category"
                 ],
                 "summary": "Create a new category",
                 "parameters": [
@@ -198,7 +198,7 @@
             "delete": {
                 "description": "Delete a category by its ID",
                 "tags": [
-                    "category"
+                    "Category"
                 ],
                 "summary": "Delete a category by ID",
                 "parameters": [
@@ -609,7 +609,7 @@
                 "createdAt": {
                     "type": "string"
                 },
-                "deletedAt": {
+                "deleteAt": {
                     "type": "string"
                 },
                 "id": {

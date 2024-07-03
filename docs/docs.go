@@ -22,7 +22,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "categories"
+                    "Categories"
                 ],
                 "summary": "Get all categories",
                 "responses": {
@@ -60,7 +60,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "category"
+                    "Category"
                 ],
                 "summary": "Get category by ID",
                 "parameters": [
@@ -111,7 +111,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "category"
+                    "Category"
                 ],
                 "summary": "Update a existing category",
                 "parameters": [
@@ -165,7 +165,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "category"
+                    "Category"
                 ],
                 "summary": "Create a new category",
                 "parameters": [
@@ -209,7 +209,7 @@ const docTemplate = `{
             "delete": {
                 "description": "Delete a category by its ID",
                 "tags": [
-                    "category"
+                    "Category"
                 ],
                 "summary": "Delete a category by ID",
                 "parameters": [
@@ -620,7 +620,7 @@ const docTemplate = `{
                 "createdAt": {
                     "type": "string"
                 },
-                "deletedAt": {
+                "deleteAt": {
                     "type": "string"
                 },
                 "id": {
